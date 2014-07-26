@@ -45,7 +45,16 @@ app.get('/getHeroImage', function (req, res) {
 });
 
 app.post('/setHeroStats', function (req, res) {
-    console.log(req.body);
+    var param = req.body;
+    console.log(param);
+
+    if (typeof(param.name) == 'string') {
+        console.log('name ok');
+    }
+
+    console.log('str: ' + typeof(param.strength));
+    console.log('is: ' + typeof(param.isInvincible));
+
     superhero.name = 'changed';
     console.log('Hero params changed');
     res.end('Done set params!');
