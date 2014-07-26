@@ -16,6 +16,8 @@ superhero.dexterity = 20;
 superhero.intellect = 0;
 superhero.isInvincible = false;
 
+var imageName = 'superhero.jpg';
+
 app.get('/', function (req, res) {
     res.send('Hello World');
 });
@@ -26,7 +28,19 @@ app.get('/getHeroStats', function (req, res) {
 });
 
 app.get('/getHeroImage', function (req, res) {
-    res.sendfile('superhero.jpg');
+    res.setHeader("API Info", "This is superhero image.");
+
+    // check if there is an image
+    fs.exists(imageName, function(exists) {
+        if (exists) {
+            res.sendfile(imageName);
+        } else {
+            console.log('Trying to get image that not uploaded or deleted');
+            res.json({imageStatus: 'Not uploaded'});
+        }
+    });
+
+
 });
 
 app.post('/setHeroStats', function (req, res) {
@@ -43,7 +57,7 @@ app.post('/uploadHeroImage', function (req, res) {
         && req.files.filedata.size <= 1000000) {
         console.log('JPG file received and it\' size smaller than 1Mb.');
         var tmpPath = req.files.filedata.path;
-        var newPath = 'superhero.jpg';
+        var newPath = imageName;
 
         fs.rename(tmpPath, newPath, function (err) {
             if (err) {
