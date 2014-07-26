@@ -6,7 +6,12 @@ app.disable('x-powered-by'); // remove mess from header
 var multer = require('multer'); // to handle uploads
 app.use(multer({dest: './uploads/'}));
 
-var fs = require('fs'); // filesystem stuff (to move temp uploaded file)
+// to get params from POST
+var bodyParser = require('body-parser');
+app.use(bodyParser.json());
+
+// filesystem stuff (to move temp uploaded file)
+var fs = require('fs');
 
 // set default superhero info
 var superhero = {};
@@ -18,12 +23,9 @@ superhero.isInvincible = false;
 
 var imageName = 'superhero.jpg';
 
-app.get('/', function (req, res) {
-    res.send('Hello World');
-});
-
 app.get('/getHeroStats', function (req, res) {
     res.setHeader("API Info", "This is info about superhero."); // set custom header (REST?)
+    console.log('Showing hero stats.');
     res.json(superhero); // return superhero object as JSON string
 });
 
@@ -31,20 +33,21 @@ app.get('/getHeroImage', function (req, res) {
     res.setHeader("API Info", "This is superhero image.");
 
     // check if there is an image
-    fs.exists(imageName, function(exists) {
+    fs.exists(imageName, function (exists) {
         if (exists) {
             res.sendfile(imageName);
         } else {
-            console.log('Trying to get image that not uploaded or deleted');
+            // if there is no file just send back JSON with info
+            console.log('Trying to get image that not uploaded or deleted.');
             res.json({imageStatus: 'Not uploaded'});
         }
     });
-
-
 });
 
 app.post('/setHeroStats', function (req, res) {
+    console.log(req.body);
     superhero.name = 'changed';
+    console.log('Hero params changed');
     res.end('Done set params!');
 });
 
@@ -81,7 +84,6 @@ app.post('/uploadHeroImage', function (req, res) {
     }
 });
 
-
 var server = app.listen(3000, function () {
-    console.log('Listening on port %d', server.address().port);
+    console.log('Service running on port %d', server.address().port);
 });
