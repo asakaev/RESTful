@@ -15,7 +15,7 @@ var fs = require('fs');
 
 // set default superhero info
 var superhero = {};
-superhero.name = 'Looser';
+superhero.name = 'Just usual superhero';
 superhero.strength = 10;
 superhero.dexterity = 20;
 superhero.intellect = 0;
@@ -45,6 +45,7 @@ app.get('/getHeroImage', function (req, res) {
 });
 
 app.post('/setHeroStats', function (req, res) {
+    res.setHeader("API Info", "This is info about hero stats update.");
     var param = req.body;
 
     // checking parameters from POST
@@ -85,7 +86,6 @@ app.post('/setHeroStats', function (req, res) {
 
 app.post('/uploadHeroImage', function (req, res) {
     res.setHeader("API Info", "This is info about file upload.");
-    console.log(req.files);
 
     // check if something uploaded and extension is JPG and size smaller than 1Mb
     if (req.files && req.files.filedata.extension == 'jpg'
@@ -117,5 +117,5 @@ app.post('/uploadHeroImage', function (req, res) {
 });
 
 var server = app.listen(3000, function () {
-    console.log('Service running on port %d', server.address().port);
+    console.log('Service running on port %d.', server.address().port);
 });

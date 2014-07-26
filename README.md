@@ -9,4 +9,4 @@ Simple RESTful API
 * to GET superhero picture just use your browser: http://localhost:3000/getHeroImage
 * to POST file with success: 'curl -i -F filedata=@superOk.jpg http://localhost:3000/uploadHeroImage'
 * to POST file with error (2Mb): 'curl -i -F filedata=@superBig.jpg http://localhost:3000/uploadHeroImage'
-* to POST params: 'curl -H "Content-Type: application/json" -d '{"name":"xyz","strength":20,"dexterity":40,"intellect":11,"isInvincible":true}' http://localhost:3000/setHeroStats'
+* to POST params: 'curl -H "Content-Type: application/json" -d '{"name":"Turner","strength":20,"dexterity":20,"intellect":42,"isInvincible":true}' http://localhost:3000/setHeroStats'
