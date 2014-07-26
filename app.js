@@ -46,18 +46,41 @@ app.get('/getHeroImage', function (req, res) {
 
 app.post('/setHeroStats', function (req, res) {
     var param = req.body;
-    console.log(param);
 
-    if (typeof(param.name) == 'string') {
-        console.log('name ok');
+    // checking parameters from POST
+    if (typeof(param.name) == 'string'
+        && typeof(param.strength) == 'number'
+        && typeof(param.dexterity) == 'number'
+        && typeof(param.intellect) == 'number'
+        && typeof(param.isInvincible) == 'boolean') {
+        console.log('Hero params is complete and types fit.');
+
+        // check params that has changed and create JSON for response
+        var changes = {};
+        var changesCount = 0;
+        for (var propertyName in superhero) {
+            if (superhero[propertyName] == param[propertyName]) {
+                changes[propertyName] = 'Not changed';
+            } else {
+                changes[propertyName] = 'Changed';
+                changesCount++;
+            }
+
+            // update hero stats
+            superhero[propertyName] = param[propertyName];
+        }
+
+        if (changesCount) {
+            console.log('Some of hero stats has been changed.');
+        } else {
+            console.log('Parameters is OK, but all the same as hero\'s stats.');
+        }
+
+        res.json(changes); // send JSON with detailed info about stats update
+    } else {
+        console.log('Something wrong with parameters.');
+        res.json({setStats: 'error'});
     }
-
-    console.log('str: ' + typeof(param.strength));
-    console.log('is: ' + typeof(param.isInvincible));
-
-    superhero.name = 'changed';
-    console.log('Hero params changed');
-    res.end('Done set params!');
 });
 
 app.post('/uploadHeroImage', function (req, res) {
